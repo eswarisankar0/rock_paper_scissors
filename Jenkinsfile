@@ -19,7 +19,7 @@ pipeline {
                 echo "Installing dependencies..."
                 sh '''
                 if [ -f requirements.txt ]; then
-                    pip install -r requirements.txt
+                    pip3 install -r requirements.txt
                 fi
 
                 if [ -f package.json ]; then
@@ -67,3 +67,4 @@ pipeline {
         }
     }
 }
+
