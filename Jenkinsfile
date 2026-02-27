@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "ahileshroy/simple-app"
+        DOCKER_IMAGE = "ahileshroy/stone-paper-scissors"
         DOCKER_CREDENTIALS_ID ="devops-dockerhub"
     }
 
@@ -67,4 +67,5 @@ pipeline {
         }
     }
 }
+
 
