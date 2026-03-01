@@ -250,7 +250,7 @@ HTML = '''
 <div class="stars"></div>
 <div class="container">
 
-    <h1 class="title">✨ Mystic Duel ✨</h1>
+    <h1 class="title">✨ Mystical Duel ✨</h1>
     <p class="subtitle">Choose your spell</p>
 
     <form method="POST">
