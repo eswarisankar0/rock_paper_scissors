@@ -2,8 +2,10 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "ahileshroy/simple-app"
-        DOCKER_CREDENTIALS_ID ="devops-dockerhub"
+        DOCKER_IMAGE = "ahileshroy/stone-paper-scissors"
+        DOCKER_CREDENTIALS_ID = "devops-dockerhub"
+        CONTAINER_NAME = "rps-app"
+        APP_PORT = "5000"
     }
 
     stages {
@@ -19,7 +21,7 @@ pipeline {
                 echo "Installing dependencies..."
                 sh '''
                 if [ -f requirements.txt ]; then
-                    pip install -r requirements.txt
+                    pip3 install -r requirements.txt
                 fi
 
                 if [ -f package.json ]; then
@@ -48,22 +50,31 @@ pipeline {
             }
         }
 
-        stage('Deploy (Optional)') {
-            when {
-                branch 'main'
-            }
+        stage('Deploy') {
             steps {
-                echo "Deployment stage can be added here (EC2, etc)"
+                script {
+                    sh '''
+                    echo "Pulling latest image..."
+                    docker pull ${DOCKER_IMAGE}:latest
+
+                    echo "Stopping old container if exists..."
+                    docker stop ${CONTAINER_NAME} || true
+                    docker rm ${CONTAINER_NAME} || true
+
+                    echo "Running new container..."
+                    docker run -d -p ${APP_PORT}:${APP_PORT} --name ${CONTAINER_NAME} ${DOCKER_IMAGE}:latest
+                    '''
+                }
             }
         }
     }
 
     post {
         success {
-            echo "Build Successful!"
+            echo "CI/CD Pipeline Executed Successfully!"
         }
         failure {
-            echo "Build Failed!"
+            echo "Pipeline Failed!"
         }
     }
 }
